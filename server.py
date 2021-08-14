@@ -11,25 +11,16 @@ credential = ServiceAccountCredentials.from_json_keyfile_name("credentials.json"
 client = gspread.authorize(credential)
 gsheet = client.open("Python Server").sheet1
 
-
-# @app.route('/all_reviews', methods=["GET"])
-# def all_reviews():
-#     return jsonify(gsheet.get_all_records())
-
-# @app.route('/all_values', methods=["GET"])
-# def all_values():
-#     return jsonify(gsheet.get_all_values())
-
-
 @app.route('/')
-def hello_world():
-    return "Server Main Screen"
+def main_screen():
+    return "<h1>Server Main Screen </h1>"
 
-@app.route('/get_additional_information/<account_name>', methods=['GET'])
-def get_additional_information(account_name):
-
-    cell = gsheet.find(account_name)
+@app.route('/get_additional_information', methods=['GET'])
+def get_additional_information():
+    account = request.args.get('account')
+    cell = gsheet.find(account)
     acc_details = jsonify(gsheet.get_all_records()[cell.row - 2])
+    
     return acc_details
 
 
